@@ -85,6 +85,16 @@ namespace Link
             }
         }
 
+        [ContextMenu("Check Board")]
+        public void CheckBoard()
+        {
+            if (!boardAnalyzer.HasPossibleMoves())
+            {
+                Debug.Log("No Possible Moves");
+                boardManager.ShuffleBoard();
+            }
+        }
+
         private void AddChipToLink(Chip chip)
         {
             currentLink.Add(chip);

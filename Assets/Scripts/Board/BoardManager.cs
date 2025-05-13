@@ -118,10 +118,8 @@ namespace Board
 
         public void ShuffleBoard()
         {
-            Debug.Log("Shuffling board due to no moves!");
             List<Chip> chips = new();
-
-            // Collect all chips
+            
             foreach (Tile tile in _board)
             {
                 if (tile.CurrentChip != null)
@@ -130,8 +128,7 @@ namespace Board
                     tile.ClearChip();
                 }
             }
-
-            // Shuffle
+            
             for (int i = 0; i < chips.Count; i++)
             {
                 Chip temp = chips[i];
@@ -139,8 +136,7 @@ namespace Board
                 chips[i] = chips[rand];
                 chips[rand] = temp;
             }
-
-            // Reassign
+            
             int index = 0;
             for (int x = 0; x < _board.GetLength(0); x++)
             {

@@ -273,7 +273,7 @@ MonoBehaviour:
   scoreManager: {fileID: 1592848381}
   boardAnalyzer: {fileID: 416438033}
   moveManager: {fileID: 1109825017}
-  gameConfig: {fileID: 0}
+  gameConfig: {fileID: 11400000, guid: c747a011232517c418098e268e79294a, type: 2}
 --- !u!1 &416438031
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardManager: {fileID: 463514657}
-  gameConfig: {fileID: 0}
+  gameConfig: {fileID: 11400000, guid: c747a011232517c418098e268e79294a, type: 2}
 --- !u!1 &463514655
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,6 +521,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardManager: {fileID: 463514657}
+  gameConfig: {fileID: 11400000, guid: c747a011232517c418098e268e79294a, type: 2}
+  analyzer: {fileID: 416438033}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

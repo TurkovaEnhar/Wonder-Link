@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Board;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace Link
 {
     public class LinkManager : MonoBehaviour
     {
+        public BoardManager boardManager; 
         [SerializeField] private LinkMode linkMode = LinkMode.FourWay;
         private List<Chip> currentLink = new();
         private ChipColor _currentColor;
@@ -56,7 +58,14 @@ namespace Link
             {
                 chip.DestroyChip();
             }
+         
+            StartCoroutine(DelayedFill());
             
+        }
+        private IEnumerator DelayedFill()
+        {
+            yield return new WaitForEndOfFrame(); // Destroylar tamamlansın
+            boardManager.FillBoard();
         }
 
         private void AddChipToLink(Chip chip)

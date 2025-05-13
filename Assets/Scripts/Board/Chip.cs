@@ -6,7 +6,7 @@ namespace Board
     public class Chip : MonoBehaviour
     {
         public ChipColor Color { get; private set; }
-        public Tile ParentTile { get; private set; }
+        public Tile ParentTile { get;  set; }
         private Color _originalColor;
         private SpriteRenderer _spriteRenderer;
         public void Initialize(ChipColor color, Tile tile)

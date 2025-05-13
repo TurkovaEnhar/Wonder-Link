@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using Game;
 using UnityEngine;
@@ -114,6 +115,48 @@ namespace Board
 
             return null;
         }
+
+        public void ShuffleBoard()
+        {
+            Debug.Log("Shuffling board due to no moves!");
+            List<Chip> chips = new();
+
+            // Collect all chips
+            foreach (Tile tile in _board)
+            {
+                if (tile.CurrentChip != null)
+                {
+                    chips.Add(tile.CurrentChip);
+                    tile.ClearChip();
+                }
+            }
+
+            // Shuffle
+            for (int i = 0; i < chips.Count; i++)
+            {
+                Chip temp = chips[i];
+                int rand = Random.Range(i, chips.Count);
+                chips[i] = chips[rand];
+                chips[rand] = temp;
+            }
+
+            // Reassign
+            int index = 0;
+            for (int x = 0; x < _board.GetLength(0); x++)
+            {
+                for (int y = 0; y < _board.GetLength(1); y++)
+                {
+                    Tile tile = _board[x, y];
+                    if (index >= chips.Count) return;
+
+                    Chip chip = chips[index++];
+                    chip.transform.position = tile.transform.position;
+                    tile.SetChip(chip);
+                    chip.ParentTile = tile;
+                }
+            }
+        }
+
         private Vector2 GetTileSize()
         {
             if (tileSprite == null)
@@ -130,5 +173,7 @@ namespace Board
         {
             return (ChipColor)Random.Range(0, System.Enum.GetValues(typeof(ChipColor)).Length);
         }
+        public Tile[,] GetBoard() => _board;
+        public ChipSettings GetChipSettings() => chipVisualConfig;
     }
 }

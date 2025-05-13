@@ -10,12 +10,15 @@ namespace Link
     public class LinkManager : MonoBehaviour
     {
         public BoardManager boardManager; 
-        [SerializeField] private LinkMode linkMode = LinkMode.FourWay;
         [Header("Game Systems")]
         [SerializeField] private ScoreManager scoreManager;
+        [SerializeField] private BoardAnalyzer boardAnalyzer;
         [SerializeField] private MoveManager moveManager;
         private List<Chip> currentLink = new();
         private ChipColor _currentColor;
+        [SerializeField] private GameConfig gameConfig;
+
+  
 
         public void BeginLink(Chip startChip)
         {
@@ -67,13 +70,19 @@ namespace Link
             }
             scoreManager.AddScore(currentLink.Count); 
             moveManager.ConsumeMove();   
-            StartCoroutine(DelayedFill());
+            StartCoroutine(Fill());
             
         }
-        private IEnumerator DelayedFill()
+        private IEnumerator Fill()
         {
             yield return new WaitForEndOfFrame(); // Destroylar tamamlansın
             boardManager.FillBoard();
+            yield return new WaitForSeconds(0.3f); 
+
+            if (!boardAnalyzer.HasPossibleMoves())
+            {
+                boardManager.ShuffleBoard();
+            }
         }
 
         private void AddChipToLink(Chip chip)
@@ -88,7 +97,7 @@ namespace Link
             Vector2Int posB = b.ParentTile.GridPosition;
             Vector2Int diff = posB - posA;
 
-            if (linkMode == LinkMode.FourWay)
+            if (CurrentLinkMode == LinkMode.FourWay)
             {
                 return Mathf.Abs(diff.x) + Mathf.Abs(diff.y) == 1;
             }
@@ -97,5 +106,6 @@ namespace Link
                 return Mathf.Abs(diff.x) <= 1 && Mathf.Abs(diff.y) <= 1 && (diff != Vector2Int.zero);
             }
         }
+        private LinkMode CurrentLinkMode => gameConfig.linkMode;
     }
 } 

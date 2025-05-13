@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56f733ef11354a0eb517be396d3fd64d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boardManager: {fileID: 463514657}
   linkMode: 1
 --- !u!1 &463514655
 GameObject:
@@ -215,6 +216,7 @@ MonoBehaviour:
   chipPrefab: {fileID: 3748469210939221913, guid: 98fcd786f21de89458076b95a1e05b25, type: 3}
   tileSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   boardSettings: {fileID: 11400000, guid: 15cc388ff6f4d4747ae00aa10c289e11, type: 2}
+  chipVisualConfig: {fileID: 11400000, guid: 6f5addf4340e9844fbed2f72d5a5ea92, type: 2}
   spacing: 0.1
 --- !u!1 &465514608
 GameObject:

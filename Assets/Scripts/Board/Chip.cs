@@ -7,15 +7,15 @@ namespace Board
     {
         public ChipColor Color { get; private set; }
         public Tile ParentTile { get;  set; }
-        private Color _originalColor;
+        private Sprite _originalSprite;
         private SpriteRenderer _spriteRenderer;
-        public void Initialize(ChipColor color, Tile tile)
+        public void Initialize(ChipColor color, Tile tile,Sprite sprite)
         {
             Color = color;
             ParentTile = tile;
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _originalColor = GetChipColor(color);
-            _spriteRenderer.color =_originalColor;
+            _spriteRenderer.sprite = sprite;
+            _originalSprite = sprite;
         }
 
         private Color GetChipColor(ChipColor color)
@@ -31,11 +31,11 @@ namespace Board
         }
         public void Select()
         {
-            _spriteRenderer.color = new Color(0f,0f,0f);
+            _spriteRenderer.color = UnityEngine.Color.black;
         }
         public void ResetColor()
         {
-            _spriteRenderer.color = _originalColor;
+            _spriteRenderer.color = UnityEngine.Color.white; 
         }
 
         public void DestroyChip()

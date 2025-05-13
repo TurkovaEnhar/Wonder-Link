@@ -21,8 +21,7 @@ namespace Game
                 if (data.color == color)
                     return data.sprite;
             }
-
-            Debug.LogWarning("No sprite found for color: " + color);
+            
             return null;
         }
     }

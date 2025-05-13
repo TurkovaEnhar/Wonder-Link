@@ -118,7 +118,6 @@ namespace Board
         {
             if (tileSprite == null)
             {
-                Debug.LogWarning("Tile Sprite not assigned! Using default size.");
                 return Vector2.one;
             }
 

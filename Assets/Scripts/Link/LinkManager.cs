@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Board;
+using Game;
+using MoveSystem;
 using UnityEngine;
 
 namespace Link
@@ -9,11 +11,16 @@ namespace Link
     {
         public BoardManager boardManager; 
         [SerializeField] private LinkMode linkMode = LinkMode.FourWay;
+        [Header("Game Systems")]
+        [SerializeField] private ScoreManager scoreManager;
+        [SerializeField] private MoveManager moveManager;
         private List<Chip> currentLink = new();
         private ChipColor _currentColor;
 
         public void BeginLink(Chip startChip)
         {
+            if (!moveManager.HasMoves()) return;
+            
             currentLink.Clear();
             _currentColor = startChip.Color;
             AddChipToLink(startChip);
@@ -58,7 +65,8 @@ namespace Link
             {
                 chip.DestroyChip();
             }
-         
+            scoreManager.AddScore(currentLink.Count); 
+            moveManager.ConsumeMove();   
             StartCoroutine(DelayedFill());
             
         }

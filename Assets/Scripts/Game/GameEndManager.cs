@@ -12,6 +12,7 @@ namespace Game
     {
         [SerializeField] private GameObject endGameScreen;
         [SerializeField] private TextMeshProUGUI statusText;
+        [SerializeField] private TextMeshProUGUI finalScoreText;
         [SerializeField] private Button restartButton;
 
         private ScoreManager _scoreManager;
@@ -32,6 +33,7 @@ namespace Game
         public void Open()
         {
             statusText.text = _scoreManager.isWon() ? "You won!" : "You lost!";
+            finalScoreText.text = "Score: " + _scoreManager.GetCurrentScore();
             endGameScreen.gameObject.SetActive(true);
         }
         

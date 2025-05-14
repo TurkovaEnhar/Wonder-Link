@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Game;
 using MoveSystem;
@@ -11,6 +13,7 @@ namespace ScoreSystem
     public class ScoreManager : MonoBehaviour
     {
         public Action OnTargetScoreReached;
+        public Action OnGameEnded;
         public TextMeshProUGUI totalScoreText;
         public TextMeshProUGUI linkScoreText;
         private int _targetScore;
@@ -21,6 +24,7 @@ namespace ScoreSystem
         private Tween _currentScoreTween;
         private bool _endGameOnScore;
         private MoveManager _moveManager;
+        private bool _isAnimationPlaying;
 
         public void Initialize(MoveManager moveManager, GameConfig gameConfig)
         {
@@ -29,6 +33,21 @@ namespace ScoreSystem
             _targetScore = gameConfig.GetTargetScore();
             _linkScoreTextOriginalPosition = linkScoreText.transform.position;
             _endGameOnScore = gameConfig.GetAutoEndOnTarget();
+            _moveManager.OnMoveRunOut += OnMoveRunsOut;
+        }
+
+        private void OnMoveRunsOut()
+        {
+            StartCoroutine(WaitForAnimationThenEndGame());
+        }
+
+        private IEnumerator WaitForAnimationThenEndGame()
+        {
+            
+            yield return new WaitUntil(() => !_isAnimationPlaying);
+
+            // Then invoke the event
+            OnGameEnded?.Invoke();
         }
 
         private void Awake()
@@ -48,6 +67,7 @@ namespace ScoreSystem
         private void PlayAnimation(int points)
         {
             //For calling multiple times the animation before it ends
+            _isAnimationPlaying = true;
             var animationScore = _currentScore;
             _currentScore += points;
             
@@ -100,6 +120,7 @@ namespace ScoreSystem
 
              
             });
+            _isAnimationPlaying = false;
         }
 
 

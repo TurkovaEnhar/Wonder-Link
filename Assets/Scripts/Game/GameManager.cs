@@ -34,9 +34,9 @@ namespace Game
             boardManager.Initialize(linkManager,boardAnalyzer,gameConfig);
             endGameManager.Initialize(scoreManager);
             inputHandler.Initialize(linkManager);
-
-            moveManager.OnMoveRunOut += EndGame;
+            
             scoreManager.OnTargetScoreReached += EndGame;
+            scoreManager.OnGameEnded += EndGame;
         }
 
         private void EndGame()

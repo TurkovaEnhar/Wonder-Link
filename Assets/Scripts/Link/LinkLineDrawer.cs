@@ -12,12 +12,14 @@ namespace Link
         private void Awake()
         {
             _lineRenderer = GetComponent<LineRenderer>();
+           
             _lineRenderer.positionCount = 0;
             _lineRenderer.useWorldSpace = true;
         }
 
         public void UpdateLine(List<Chip> chips)
         {
+          
             if (chips == null || chips.Count == 0)
             {
                 _lineRenderer.positionCount = 0;

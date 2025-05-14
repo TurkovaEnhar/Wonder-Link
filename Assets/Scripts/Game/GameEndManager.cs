@@ -1,15 +1,18 @@
-﻿using MoveSystem;
+﻿using System;
+using MoveSystem;
 using ScoreSystem;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Game
 {
     public class GameEndManager : MonoBehaviour
     {
-        [SerializeField] private GameObject winScreen;
-        [SerializeField] private GameObject loseScreen;
+        [SerializeField] private GameObject endGameScreen;
+        [SerializeField] private TextMeshProUGUI statusText;
+        [SerializeField] private Button restartButton;
 
         private ScoreManager _scoreManager;
         private bool _isGameEnded;
@@ -17,30 +20,21 @@ namespace Game
         public void Initialize(ScoreManager scoreManager)
         {
             _scoreManager = scoreManager;
+            restartButton.onClick.AddListener(RestartGame);
             
+        }
+
+        private void OnDestroy()
+        {
+            restartButton.onClick.RemoveListener(RestartGame);
         }
 
         public void Open()
         {
-            if (_scoreManager.isWon())
-            {
-                ShowWinScreen();
-            }
-            else
-            {
-                ShowLoseScreen();
-            }
+            statusText.text = _scoreManager.isWon() ? "You won!" : "You lost!";
+            endGameScreen.gameObject.SetActive(true);
         }
-
-        private void ShowWinScreen()
-        {
-            winScreen.SetActive(true);
-        }
-
-        private void ShowLoseScreen()
-        {
-            loseScreen.SetActive(true);
-        }
+        
 
         public void RestartGame()
         {

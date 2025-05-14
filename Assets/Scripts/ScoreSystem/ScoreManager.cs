@@ -1,34 +1,107 @@
-﻿using Game;
+﻿using System;
+using DG.Tweening;
+using Game;
+using MoveSystem;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ScoreSystem
 {
     public class ScoreManager : MonoBehaviour
     {
+        public Action OnTargetScoreReached;
+        public TextMeshProUGUI totalScoreText;
+        public TextMeshProUGUI linkScoreText;
         private int _targetScore;
-        public TextMeshProUGUI text;
-        private int _score;
+        private int _currentScore;
         private int _baseScore = 10;
+        private Vector3 _linkScoreTextOriginalPosition;
+        private Sequence _currentMoveSequence;
+        private Tween _currentScoreTween;
+        private bool _endGameOnScore;
+        private MoveManager _moveManager;
 
-
-        public void Initialize(GameConfig gameConfig)
+        public void Initialize(MoveManager moveManager, GameConfig gameConfig)
         {
+            _moveManager = moveManager;
             _baseScore = gameConfig.GetBasePointPerChip();
             _targetScore = gameConfig.GetTargetScore();
+            _linkScoreTextOriginalPosition = linkScoreText.transform.position;
+            _endGameOnScore = gameConfig.GetAutoEndOnTarget();
         }
 
         private void Awake()
         {
-            text.text = "0";
+            totalScoreText.text = "Score: " + _currentScore;
         }
 
         public void AddScore(int linkSize)
         {
             int points = CalculateScore(linkSize);
-            _score += points;
-            text.text = _score.ToString();
+
+            linkScoreText.text = "+ " + points;
+            _moveManager.ConsumeMove();
+            PlayAnimation(points);
         }
+
+        private void PlayAnimation(int points)
+        {
+            //For calling multiple times the animation before it ends
+            var animationScore = _currentScore;
+            _currentScore += points;
+            
+            if (_currentScore >= _targetScore && _endGameOnScore)
+            {
+                OnTargetScoreReached?.Invoke();
+            }
+
+            if (_currentScoreTween != null && _currentScoreTween.IsActive())
+            {
+                // For keeping logic safe 
+                _currentScoreTween.Complete();
+            }
+
+
+            if (_currentMoveSequence != null && _currentMoveSequence.IsActive())
+            {
+                _currentMoveSequence.Kill();
+            }
+
+
+            linkScoreText.transform.position = _linkScoreTextOriginalPosition;
+            linkScoreText.transform.localScale = Vector3.zero;
+            linkScoreText.gameObject.SetActive(true);
+            linkScoreText.text = "0";
+
+
+            _currentMoveSequence = DOTween.Sequence();
+
+            _currentMoveSequence.Append(linkScoreText.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack));
+            _currentMoveSequence.Append(DOTween.To(() => 0, x => linkScoreText.text = x.ToString(), points, 0.5f)
+                .SetEase(Ease.Linear));
+            _currentMoveSequence.Append(linkScoreText.transform.DOMove(totalScoreText.transform.position, 0.5f)
+                .SetEase(Ease.InOutSine));
+            _currentMoveSequence.Join(linkScoreText.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InOutSine));
+
+
+            _currentMoveSequence.OnComplete(() =>
+            {
+                int newScore = animationScore + points;
+
+                _currentScoreTween = DOTween.To(() => _currentScore, x =>
+                    {
+                        animationScore = x;
+                        totalScoreText.text = "Score: " + Mathf.FloorToInt(_currentScore);
+                    }, newScore, 1f).SetEase(Ease.InOutSine)
+                    .OnComplete(() => totalScoreText.text = "Score: " + _currentScore);
+
+                linkScoreText.gameObject.SetActive(false);
+
+             
+            });
+        }
+
 
         private int CalculateScore(int linkSize)
         {
@@ -37,9 +110,10 @@ namespace ScoreSystem
 
         public void ResetScore()
         {
-            _score = 0;
+            _currentScore = 0;
         }
 
-        public bool isWon() => _score >= _targetScore;
+        public bool isWon() => _currentScore >= _targetScore;
+        public int GetCurrentScore() => _currentScore;
     }
 }

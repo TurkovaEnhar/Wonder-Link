@@ -28,14 +28,15 @@ namespace Game
         private void InitializeManagers()
         {
             moveManager.Initialize(gameConfig);
-            scoreManager.Initialize(gameConfig);
-            linkManager.Initialize(scoreManager,moveManager,gameConfig);
+            scoreManager.Initialize(moveManager,gameConfig);
+            linkManager.Initialize(scoreManager,gameConfig);
             boardAnalyzer.Initialize(boardManager,gameConfig);
             boardManager.Initialize(linkManager,boardAnalyzer,gameConfig);
             endGameManager.Initialize(scoreManager);
             inputHandler.Initialize(linkManager);
 
             moveManager.OnMoveRunOut += EndGame;
+            scoreManager.OnTargetScoreReached += EndGame;
         }
 
         private void EndGame()

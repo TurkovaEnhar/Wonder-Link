@@ -36,7 +36,7 @@ namespace Board
             _chipPool = new ObjectPool<Chip>(chipPrefab, initialPoolSize, transform);
             GenerateBoard();
 
-            _linkManager.OnLinkSuccess += CheckBoard;
+            _linkManager.OnLinkSuccess += Fill;
         }
         public void GenerateBoard()
         {
@@ -69,7 +69,7 @@ namespace Board
             Chip chip = _chipPool.Get();
             chip.transform.SetParent(tile.transform,false);
             chip.transform.position = spawnPos;
-
+           
             ChipColor randomColor = GetRandomColor();
             Sprite chipSprite = chipVisualConfig.GetSpriteForColor(randomColor);
 
@@ -77,19 +77,15 @@ namespace Board
             chip.OnReturnToPool = _chipPool.Return;
 
             tile.SetChip(chip);
-
-            chip.transform.DOMove(tile.transform.position, 0.25f).SetEase(Ease.OutBack);
+            chip.ResetColor();
+            chip.transform.DOMove(tile.transform.position, 0.5f).SetEase(Ease.OutBack);
         }
 
-        private void CheckBoard()
-        {
-            StartCoroutine(Fill());
-        }
+  
         
-        private IEnumerator Fill()
+        private void Fill()
         {
             FillBoard();
-            yield return new WaitForSeconds(0.3f); 
 
             if (!_boardAnalyzer.HasPossibleMoves())
             {
@@ -133,7 +129,7 @@ namespace Board
             originTile.ClearChip();
             targetTile.SetChip(chip);
             chip.ParentTile = targetTile;
-            chip.transform.DOMove(targetTile.transform.position, 0.25f).SetEase(Ease.Linear);
+            chip.transform.DOMove(targetTile.transform.position, 0.25f).SetEase(Ease.OutBack);
         }
         private Chip FindChipAbove(int x, int startY)
         {

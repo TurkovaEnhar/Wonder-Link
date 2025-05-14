@@ -17,18 +17,17 @@ namespace MoveSystem
         }
         private void Awake()
         {
-            text.text = _remainingMoves.ToString();
+            text.text = "Move: " + _remainingMoves;
         }
 
         public void ConsumeMove()
         {
-            if (_remainingMoves <= 0)
-            {
-                OnMoveRunOut?.Invoke();
-                return;
-            }
             _remainingMoves--;
-            text.text = _remainingMoves.ToString();
+            text.text = "Move: " + _remainingMoves;
+            if (_remainingMoves > 0) return;
+            
+            OnMoveRunOut?.Invoke();
+
         }
 
 

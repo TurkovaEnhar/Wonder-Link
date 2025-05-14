@@ -14,24 +14,22 @@ namespace Link
     {
         public Action OnLinkSuccess;
         private ScoreManager _scoreManager;
-        private MoveManager _moveManager;
         private GameConfig _gameConfig;
 
         private List<Chip> currentLink = new();
         private ChipColor _currentColor;
 
 
-        public void Initialize(ScoreManager scoreManager, MoveManager moveManager, GameConfig gameConfig)
+        public void Initialize(ScoreManager scoreManager, GameConfig gameConfig)
         {
             _scoreManager = scoreManager;
-            _moveManager = moveManager;
             _gameConfig = gameConfig;
             
         }
         
         public void BeginLink(Chip startChip)
         {
-            if (!_moveManager.HasMoves()) return;
+          
             
             currentLink.Clear();
             _currentColor = startChip.Color;
@@ -63,22 +61,23 @@ namespace Link
 
             currentLink.Clear();
         }
-        public void CancelLink()
+
+        private void CancelLink()
         {
             foreach (var chip in currentLink)
             {
                 chip.ResetColor();
             }
             
-        }    
-        public void ConfirmLink()
+        }
+
+        private void ConfirmLink()
         {
             foreach (var chip in currentLink)
             {
                 chip.DestroyChip();
             }
             _scoreManager.AddScore(currentLink.Count); 
-            _moveManager.ConsumeMove();
             OnLinkSuccess?.Invoke();
           
             

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Board.Chips;
+using UnityEngine;
 
 namespace Board
 {

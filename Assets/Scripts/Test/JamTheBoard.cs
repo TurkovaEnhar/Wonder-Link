@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Board;
+using Board.Chips;
 using Game;
 using Link;
 using UnityEngine;
@@ -76,8 +77,7 @@ namespace Test
                     chip.transform.position = tile.transform.position;
                 }
             }
-
-            Debug.Log("✅ Sabit jammed board uygulandı.");
+            
         }
 
         [ContextMenu("4 way jam")]
@@ -91,8 +91,7 @@ namespace Test
             {
                 ChipColor.Red, ChipColor.Green, ChipColor.Blue
             };
-
-            // Shift pattern her satırda/kolonda dönecek
+            
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -101,9 +100,8 @@ namespace Test
                     Chip chip = tile.CurrentChip;
 
                     if (chip == null) continue;
-
-                    // Düzgün karışık ama eşleşme yaratmayan renk seçimi
-                    int index = (x + y * 2) % safePattern.Length; // Deseni kaydır
+                    
+                    int index = (x + y * 2) % safePattern.Length; 
                     ChipColor color = safePattern[index];
                     Sprite sprite = boardManager.GetChipSettings().GetSpriteForColor(color);
 
@@ -112,8 +110,7 @@ namespace Test
                     chip.transform.position = tile.transform.position;
                 }
             }
-
-            Debug.Log($"✅ Board forcibly jammed for {gameConfig.linkMode} mode.");
+            
         }
     }
 }

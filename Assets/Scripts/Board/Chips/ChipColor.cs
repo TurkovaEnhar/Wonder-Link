@@ -1,4 +1,4 @@
-﻿namespace Board
+﻿namespace Board.Chips
 {
     public enum ChipColor
     {

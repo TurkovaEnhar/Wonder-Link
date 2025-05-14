@@ -1,4 +1,5 @@
 ﻿using System;
+using Game;
 using TMPro;
 using UnityEngine;
 
@@ -6,26 +7,36 @@ namespace MoveSystem
 {
     public class MoveManager : MonoBehaviour
     {
-        public TextMeshProUGUI text;
-        public int RemainingMoves { get; private set; } = 20;
+        public Action OnMoveRunOut;
+        [SerializeField] private TextMeshProUGUI text;
+        private int _remainingMoves;
 
+        public void Initialize(GameConfig gameConfig)
+        {
+            _remainingMoves = gameConfig.GetMoveCount();
+        }
         private void Awake()
         {
-            text.text = RemainingMoves.ToString();
+            text.text = _remainingMoves.ToString();
         }
 
         public void ConsumeMove()
         {
-            if (RemainingMoves <= 0) return;
-            RemainingMoves--;
-            text.text = RemainingMoves.ToString();
+            if (_remainingMoves <= 0)
+            {
+                OnMoveRunOut?.Invoke();
+                return;
+            }
+            _remainingMoves--;
+            text.text = _remainingMoves.ToString();
         }
 
-        public bool HasMoves() => RemainingMoves > 0;
 
         public void ResetMoves(int startMoves = 20)
         {
-            RemainingMoves = startMoves;
+            _remainingMoves = startMoves;
         }
+        public bool HasMoves() => _remainingMoves > 0;
+        
     }
 }

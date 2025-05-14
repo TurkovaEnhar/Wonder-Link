@@ -1,4 +1,4 @@
-namespace Game
+namespace Board
 {
     public interface IBoardSettingsProvider
     {

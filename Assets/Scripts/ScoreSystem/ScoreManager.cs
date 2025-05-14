@@ -1,15 +1,22 @@
-﻿using System;
+﻿using Game;
 using TMPro;
 using UnityEngine;
 
-namespace Game
+namespace ScoreSystem
 {
     public class ScoreManager : MonoBehaviour
     {
+        private int _targetScore;
         public TextMeshProUGUI text;
-        public int Score { get; private set; }
+        private int _score;
+        private int _baseScore = 10;
 
-        [SerializeField] private int baseScore = 10;
+
+        public void Initialize(GameConfig gameConfig)
+        {
+            _baseScore = gameConfig.GetBasePointPerChip();
+            _targetScore = gameConfig.GetTargetScore();
+        }
 
         private void Awake()
         {
@@ -19,18 +26,20 @@ namespace Game
         public void AddScore(int linkSize)
         {
             int points = CalculateScore(linkSize);
-            Score += points;
-            text.text = Score.ToString();
+            _score += points;
+            text.text = _score.ToString();
         }
 
         private int CalculateScore(int linkSize)
         {
-            return baseScore * linkSize;
+            return _baseScore * linkSize;
         }
 
         public void ResetScore()
         {
-            Score = 0;
+            _score = 0;
         }
+
+        public bool isWon() => _score >= _targetScore;
     }
 }

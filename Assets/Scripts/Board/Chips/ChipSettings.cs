@@ -1,7 +1,6 @@
-﻿using Board;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Game
+namespace Board.Chips
 {
     [System.Serializable]
     public class ChipSpriteData

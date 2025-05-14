@@ -1,18 +1,25 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
-using Board;
+using Board.Chips;
+using Game;
 using Link;
+using UnityEngine;
 
-namespace Game
+namespace Board
 {
     public class BoardAnalyzer : MonoBehaviour
     {
-        [SerializeField] private BoardManager boardManager;
-        [SerializeField] private GameConfig gameConfig;
-
+        private BoardManager _boardManager;
+        private GameConfig _gameConfig;
+        
+        public void Initialize(BoardManager boardManager, GameConfig gameConfig)
+        {
+            _boardManager = boardManager;
+            _gameConfig = gameConfig;
+            
+        }
         public bool HasPossibleMoves()
         {
-            Tile[,] board = boardManager.GetBoard();
+            Tile[,] board = _boardManager.GetBoard();
             int width = board.GetLength(0);
             int height = board.GetLength(1);
             HashSet<Vector2Int> globalVisited = new();
@@ -85,7 +92,7 @@ namespace Game
             yield return Vector2Int.left;
             yield return Vector2Int.right;
 
-            if (gameConfig.linkMode == LinkMode.EightWay)
+            if (_gameConfig.linkMode == LinkMode.EightWay)
             {
                 yield return new Vector2Int(1, 1);
                 yield return new Vector2Int(-1, 1);

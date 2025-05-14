@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Board.Chips;
 using DG.Tweening;
 using Game;
+using Link;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,22 +14,34 @@ namespace Board
     {
         [Header("Prefabs")]
         [SerializeField] private GameObject tilePrefab;
-        [SerializeField] private GameObject chipPrefab;
+        [SerializeField] private Chip chipPrefab;
         [SerializeField] private Sprite tileSprite;
         [Header("Settings")]
-        [SerializeField] private BoardSettings boardSettings;
         [SerializeField] private ChipSettings chipVisualConfig;
         [SerializeField] private float spacing = 0.1f;
+        private int initialPoolSize = 100;
+        
         private Tile[,] _board;
+        private GameConfig _boardSettings;
+        private LinkManager _linkManager;
+        private BoardAnalyzer _boardAnalyzer;
+        private ObjectPool<Chip> _chipPool;
 
-        private void Start()
+
+        public void Initialize( LinkManager linkManager,BoardAnalyzer boardAnalyzer, GameConfig gameConfig )
         {
+            _boardSettings = gameConfig;
+            _linkManager = linkManager;
+            _boardAnalyzer = boardAnalyzer;
+            _chipPool = new ObjectPool<Chip>(chipPrefab, initialPoolSize, transform);
             GenerateBoard();
+
+            _linkManager.OnLinkSuccess += CheckBoard;
         }
         public void GenerateBoard()
         {
-            int width = boardSettings.GetBoardWidth();
-            int height = boardSettings.GetBoardHeight();
+            int width = _boardSettings.GetBoardWidth();
+            int height = _boardSettings.GetBoardHeight();
             _board = new Tile[width, height];
             Vector2 tileSize = GetTileSize();
 
@@ -50,18 +65,38 @@ namespace Board
         private void SpawnChip(Tile tile)
         {
             Vector3 spawnPos = tile.transform.position + Vector3.up * 2f;
-            GameObject chipGO = Instantiate(chipPrefab, spawnPos, Quaternion.identity, tile.transform);
 
-            Chip chip = chipGO.GetComponent<Chip>();
+            Chip chip = _chipPool.Get();
+            chip.transform.SetParent(tile.transform,false);
+            chip.transform.position = spawnPos;
+
             ChipColor randomColor = GetRandomColor();
             Sprite chipSprite = chipVisualConfig.GetSpriteForColor(randomColor);
 
             chip.Initialize(randomColor, tile, chipSprite);
+            chip.OnReturnToPool = _chipPool.Return;
+
             tile.SetChip(chip);
 
             chip.transform.DOMove(tile.transform.position, 0.25f).SetEase(Ease.OutBack);
         }
-        public void FillBoard()
+
+        private void CheckBoard()
+        {
+            StartCoroutine(Fill());
+        }
+        
+        private IEnumerator Fill()
+        {
+            FillBoard();
+            yield return new WaitForSeconds(0.3f); 
+
+            if (!_boardAnalyzer.HasPossibleMoves())
+            {
+                ShuffleBoard();
+            }
+        }
+        private void FillBoard()
         {
             int width = _board.GetLength(0);
             int height = _board.GetLength(1);
@@ -116,7 +151,7 @@ namespace Board
             return null;
         }
 
-        public void ShuffleBoard()
+        private void ShuffleBoard()
         {
             List<Chip> chips = new();
             

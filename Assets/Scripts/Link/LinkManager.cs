@@ -1,28 +1,37 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Board;
+using Board.Chips;
 using Game;
 using MoveSystem;
+using ScoreSystem;
 using UnityEngine;
 
 namespace Link
 {
     public class LinkManager : MonoBehaviour
     {
-        public BoardManager boardManager; 
-        [Header("Game Systems")]
-        [SerializeField] private ScoreManager scoreManager;
-        [SerializeField] private BoardAnalyzer boardAnalyzer;
-        [SerializeField] private MoveManager moveManager;
+        public Action OnLinkSuccess;
+        private ScoreManager _scoreManager;
+        private MoveManager _moveManager;
+        private GameConfig _gameConfig;
+
         private List<Chip> currentLink = new();
         private ChipColor _currentColor;
-        [SerializeField] private GameConfig gameConfig;
 
-  
 
+        public void Initialize(ScoreManager scoreManager, MoveManager moveManager, GameConfig gameConfig)
+        {
+            _scoreManager = scoreManager;
+            _moveManager = moveManager;
+            _gameConfig = gameConfig;
+            
+        }
+        
         public void BeginLink(Chip startChip)
         {
-            if (!moveManager.HasMoves()) return;
+            if (!_moveManager.HasMoves()) return;
             
             currentLink.Clear();
             _currentColor = startChip.Color;
@@ -68,32 +77,13 @@ namespace Link
             {
                 chip.DestroyChip();
             }
-            scoreManager.AddScore(currentLink.Count); 
-            moveManager.ConsumeMove();   
-            StartCoroutine(Fill());
+            _scoreManager.AddScore(currentLink.Count); 
+            _moveManager.ConsumeMove();
+            OnLinkSuccess?.Invoke();
+          
             
         }
-        private IEnumerator Fill()
-        {
-            yield return new WaitForEndOfFrame(); // Destroylar tamamlansın
-            boardManager.FillBoard();
-            yield return new WaitForSeconds(0.3f); 
-
-            if (!boardAnalyzer.HasPossibleMoves())
-            {
-                boardManager.ShuffleBoard();
-            }
-        }
-
-        [ContextMenu("Check Board")]
-        public void CheckBoard()
-        {
-            if (!boardAnalyzer.HasPossibleMoves())
-            {
-                Debug.Log("No Possible Moves");
-                boardManager.ShuffleBoard();
-            }
-        }
+        
 
         private void AddChipToLink(Chip chip)
         {
@@ -116,6 +106,7 @@ namespace Link
                 return Mathf.Abs(diff.x) <= 1 && Mathf.Abs(diff.y) <= 1 && (diff != Vector2Int.zero);
             }
         }
-        private LinkMode CurrentLinkMode => gameConfig.linkMode;
+        private LinkMode CurrentLinkMode => _gameConfig.linkMode;
+        public  List<Chip> GetCurrentLink() => currentLink;
     }
 } 

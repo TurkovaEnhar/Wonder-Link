@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-namespace Board
+namespace Board.Chips
 {
     [RequireComponent(typeof(SpriteRenderer))]
     public class Chip : MonoBehaviour
     {
+        public Action<Chip> OnReturnToPool;
         public ChipColor Color { get; private set; }
         public Tile ParentTile { get;  set; }
         private SpriteRenderer _spriteRenderer;
@@ -27,7 +29,8 @@ namespace Board
 
         public void DestroyChip()
         {
-            Destroy(gameObject);
+            ParentTile.ClearChip();
+            OnReturnToPool?.Invoke(this);
         }
 
     }

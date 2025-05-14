@@ -1,18 +1,25 @@
 ﻿using Board;
-using DefaultNamespace;
+using Board.Chips;
 using UnityEngine;
 
 namespace Link
 {
     public class InputHandler : MonoBehaviour
     {
-        [SerializeField] private Camera mainCamera;
-        [SerializeField] private LinkManager linkManager;
+        private Camera _mainCamera;
+        private LinkManager _linkManager;
+        private bool _isLinking;
+        [SerializeField] private LinkLineDrawer lineDrawer;
 
-        private bool isLinking = false;
+        public void Initialize(LinkManager linkManager)
+        {
+            _linkManager = linkManager;
+            _mainCamera = Camera.main;
+        }
 
         private void Update()
         {
+#if UNITY_EDITOR || UNITY_STANDALONE
             if (Input.GetMouseButtonDown(0))
             {
                 StartLink();
@@ -25,6 +32,28 @@ namespace Link
             {
                 EndLink();
             }
+#elif UNITY_IOS || UNITY_ANDROID
+    if (Input.touchCount > 0)
+    {
+        Touch touch = Input.GetTouch(0);
+        switch (touch.phase)
+        {
+            case TouchPhase.Began:
+                StartLink(touch.position);
+                break;
+            case TouchPhase.Moved:
+            case TouchPhase.Stationary:
+                ContinueLink(touch.position);
+                break;
+            case TouchPhase.Ended:
+            case TouchPhase.Canceled:
+                EndLink();
+                break;
+        }
+    }
+#endif
+            if(_linkManager?.GetCurrentLink().Count>0)
+                lineDrawer.UpdateLine(_linkManager.GetCurrentLink());
         }
 
         private void StartLink()
@@ -32,34 +61,51 @@ namespace Link
             Chip chip = RaycastChip();
             if (chip)
             {
-                isLinking = true;
-                linkManager.BeginLink(chip);
+                _isLinking = true;
+                _linkManager.BeginLink(chip);
             }
         }
 
         private void ContinueLink()
         {
-            if (!isLinking) return;
+            if (!_isLinking) return;
 
             Chip chip = RaycastChip();
             if (chip)
             {
-                linkManager.TryAddToLink(chip);
+                _linkManager.TryAddToLink(chip);
             }
+        }
+        private void StartLink(Vector2 pos)
+        {
+            Chip chip = RaycastChip(pos);
+            if (chip)
+            {
+                _isLinking = true;
+                _linkManager.BeginLink(chip);
+            }
+        }
+
+        private void ContinueLink(Vector2 pos)
+        {
+            if (!_isLinking) return;
+            Chip chip = RaycastChip(pos);
+            if (chip) _linkManager.TryAddToLink(chip);
         }
 
         private void EndLink()
         {
-            if (!isLinking) return;
+            if (!_isLinking) return;
 
-            isLinking = false;
-            linkManager.CompleteLink();
+            _isLinking = false;
+            _linkManager.CompleteLink();
+            lineDrawer.ClearLine();
         }
 
         private Chip RaycastChip()
         {
             Vector2 screenPos = Input.mousePosition;
-            Vector2 worldPos = mainCamera.ScreenToWorldPoint(screenPos);
+            Vector2 worldPos = _mainCamera.ScreenToWorldPoint(screenPos);
 
             RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
             if (hit.collider != null)
@@ -72,6 +118,12 @@ namespace Link
             }
 
             return null;
+        }
+        private Chip RaycastChip(Vector2 screenPos)
+        {
+            Vector2 worldPos = _mainCamera.ScreenToWorldPoint(screenPos);
+            RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+            return hit.collider?.GetComponent<Chip>();
         }
     }
 }

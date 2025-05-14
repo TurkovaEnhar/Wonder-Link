@@ -1021,6 +1021,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1102,6 +1103,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c750034d122e994e8a39904f818c7bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  referenceWidth: 1920
+  referenceHeight: 1080
+  baseOrthoSize: 0.65
 --- !u!1 &963887322
 GameObject:
   m_ObjectHideFlags: 0
@@ -1472,6 +1488,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1260394675}
   - component: {fileID: 1260394676}
+  - component: {fileID: 1260394677}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -1488,8 +1505,8 @@ Transform:
   m_GameObject: {fileID: 1260394674}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.94, y: 7.7297, z: 19}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.94, y: 1, z: 19}
+  m_LocalScale: {x: 0.2775676, y: 0.23542032, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1546,6 +1563,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1260394677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260394674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63bddc44617ad6d44aae4b2aa4415c1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1273314273
 GameObject:
   m_ObjectHideFlags: 0
@@ -1639,7 +1668,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1303225894
 RectTransform:
   m_ObjectHideFlags: 0

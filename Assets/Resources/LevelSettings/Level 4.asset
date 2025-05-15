@@ -18,5 +18,4 @@ MonoBehaviour:
   linkTarget:
     linkSize: 0
     amount: 0
-  autoEndOnTarget: 0
-  autoEndOnRequirements: 0
+  autoEndOnTargetCompleted: 1

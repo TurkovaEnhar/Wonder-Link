@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e5899554d994dbf9cd3af3cbd4c4eca, type: 3}
   m_Name: Level 2
   m_EditorClassIdentifier: 
-  moveCount: 100
+  moveCount: 20
   targetScore: 150
-  colorTargets: []
+  colorTargets:
+  - color: 0
+    count: 20
+  - color: 1
+    count: 12
   linkTarget:
-    linkSize: 3
-    amount: 5
+    linkSize: 5
+    amount: 3
   autoEndOnTargetCompleted: 1

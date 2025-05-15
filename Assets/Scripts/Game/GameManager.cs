@@ -58,6 +58,7 @@ namespace Game
             
             if (level.autoEndOnTargetCompleted)
             {
+                //Eğer level ile beraber auto end seçilirse hamle sayısının bitmesini beklemez eğer seçilmezse hamle sayısı bitene kadar oyun devam eder.
                 scoreController.OnTargetScoreReached += EndGame;
             }
             

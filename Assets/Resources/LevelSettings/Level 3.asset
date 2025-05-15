@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveCount: 20
   targetScore: 100
-  colorTargets: []
+  colorTargets:
+  - color: 2
+    count: 6
+  - color: 3
+    count: 9
   linkTarget:
     linkSize: 0
     amount: 0
-  autoEndOnTarget: 0
-  autoEndOnRequirements: 0
+  autoEndOnTargetCompleted: 1

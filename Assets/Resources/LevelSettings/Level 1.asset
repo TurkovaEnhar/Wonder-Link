@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e5899554d994dbf9cd3af3cbd4c4eca, type: 3}
   m_Name: Level 1
   m_EditorClassIdentifier: 
-  moveCount: 20
+  moveCount: 6
   targetScore: 100
   colorTargets: []
   linkTarget:

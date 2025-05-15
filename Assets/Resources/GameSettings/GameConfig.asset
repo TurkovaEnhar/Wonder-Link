@@ -15,7 +15,4 @@ MonoBehaviour:
   linkMode: 1
   width: 8
   height: 8
-  targetScore: 100
-  moveCount: 10
   basePointPerChip: 10
-  autoEndOnTarget: 0

@@ -44,12 +44,16 @@ namespace Board
             int height = _boardSettings.GetBoardHeight();
             _board = new Tile[width, height];
             Vector2 tileSize = GetTileSize();
+            Vector2 offset = new Vector2(
+                (width - 1) * tileSize.x / 2f,
+                (height - 1) * tileSize.y / 2f
+            );
 
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    Vector3 position = new Vector3(x * tileSize.x, y * tileSize.y, 0);
+                    Vector3 position = new Vector3(x * tileSize.x, y * tileSize.y, 0) - (Vector3)offset;
                     GameObject tileGO = Instantiate(tilePrefab, position, Quaternion.identity, transform);
 
                     Tile tile = tileGO.GetComponent<Tile>();

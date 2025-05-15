@@ -1,5 +1,6 @@
 ﻿using System;
 using Board;
+using BonusSystems.LevelSystem;
 using Link;
 using MoveSystem;
 using ScoreSystem;
@@ -26,7 +27,7 @@ namespace Game
         [SerializeField] private GameEndManager endGameManager;
         [SerializeField] private InputHandler inputHandler;
         [SerializeField] private StatUIManager statUIManager;
-        
+        [SerializeField] private LevelRequirementManager levelRequirementManager;
         
         private StatSystem _statSystem;
         private LinkService _linkService;
@@ -43,20 +44,22 @@ namespace Game
 
         private void InitializeManagers()
         {
+            LevelDataSO level = LevelManager.Instance.CurrentLevel;
             _statSystem = SaveSystem.LoadStats();
             _boardScanService = new BoardScanService();
             
             _linkService = new LinkService(scoreController, _statSystem,gameConfig.linkMode);
-            
-            moveController.Initialize(gameConfig);
+            _linkService.OnLinkEvaluated += levelRequirementManager.EvaluateLink;
+            moveController.Initialize(level.moveCount);
             var moveService = moveController.GetMoveService();
-            scoreController.Initialize(moveService,gameConfig);
+            scoreController.Initialize(moveService,level.targetScore,gameConfig);
             boardManager.Initialize(_linkService,_boardScanService,gameConfig);
             endGameManager.Initialize(scoreController);
             inputHandler.Initialize(_linkService);
-            
+            levelRequirementManager.Initialize(level);
             scoreController.OnTargetScoreReached += EndGame;
             scoreController.OnGameEnded += EndGame;
+            levelRequirementManager.OnAllRequirementsMet += EndGame;
         }
         
 

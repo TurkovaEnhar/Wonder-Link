@@ -11,13 +11,13 @@ namespace MoveSystem
 
         public IMoveService GetMoveService() => _moveService;
 
-        public void Initialize(GameConfig config)
+        public void Initialize(int moveCount)
         {
-            _moveService = new MoveService(config.GetMoveCount());
+            _moveService = new MoveService(moveCount);
             
             _moveService.OnMoveChanged += view.UpdateMoveText;
             _moveService.OnMoveRunOut += HandleMoveRunOut;
-            view.UpdateMoveText(config.GetMoveCount());
+            view.UpdateMoveText(moveCount);
             
         }
         

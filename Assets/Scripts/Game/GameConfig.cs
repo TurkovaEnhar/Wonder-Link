@@ -14,15 +14,11 @@ namespace Game
         [SerializeField] private int width = 8;
         [SerializeField] private int height = 8;
         [Header("Game Settings")]
-        [SerializeField] private int targetScore = 100;
-        [SerializeField] private int moveCount = 10;
         [SerializeField] private int basePointPerChip = 10;
         [SerializeField] private bool autoEndOnTarget;
 
         public int GetBoardWidth() => width;
         public int GetBoardHeight() => height;
-        public int GetTargetScore() => targetScore;
-        public int GetMoveCount() => moveCount;
         public int GetBasePointPerChip() => basePointPerChip;
         public bool GetAutoEndOnTarget() => autoEndOnTarget;
         

@@ -9,6 +9,8 @@ namespace Link
 {
     public class LinkService
     {
+        public event Action OnLinkSuccess;
+        public event Action<int,ChipColor> OnLinkEvaluated;
         private readonly ScoreController _scoreManager;
         private readonly StatSystem _statSystem;
         private readonly INeighborChecker _neighborChecker;
@@ -17,7 +19,6 @@ namespace Link
         private List<Chip> _currentLink = new();
         private ChipColor _currentColor;
 
-        public event Action OnLinkSuccess;
 
         public LinkService(ScoreController scoreManager, StatSystem statSystem, LinkMode linkMode)
         {
@@ -66,6 +67,7 @@ namespace Link
 
                 _statSystem.RecordLink(_currentLink.Count, _currentColor);
                 _scoreManager.AddScore(_currentLink.Count);
+                OnLinkEvaluated?.Invoke(_currentLink.Count, _currentColor);
                 OnLinkSuccess?.Invoke();
             }
             else

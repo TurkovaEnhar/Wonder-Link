@@ -16,10 +16,10 @@ namespace ScoreSystem
         public System.Action OnTargetScoreReached;
         public System.Action OnGameEnded;
 
-        public void Initialize( IMoveService moveService,GameConfig config)
+        public void Initialize( IMoveService moveService,int targetScore,GameConfig config)
         {
             _moveService = moveService;
-            _scoreService = new ScoreService(config.GetTargetScore(), config.GetAutoEndOnTarget());
+            _scoreService = new ScoreService(targetScore, config.GetAutoEndOnTarget());
 
             // _scoreService.OnScoreChanged += score => scoreView.SetScore(score);
             _scoreService.OnTargetReached += () => OnTargetScoreReached?.Invoke();

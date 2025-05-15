@@ -3,37 +3,27 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class BackgroundFitter : MonoBehaviour
 {
-   
-    private const float ReferenceWidth = 1920f;
-    private const float ReferenceHeight = 1080f;
-    private const float ReferenceOrthoSize = 2f;
-
-
     private void Start()
     {
-        FitBackground();
+        FitToCamera();
     }
 
-    private void FitBackground()
+    private void FitToCamera()
     {
-        Camera cam = Camera.main;
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        var cam = Camera.main;
+        var sr = GetComponent<SpriteRenderer>();
         if (cam == null || sr == null || sr.sprite == null) return;
-        
-        float refWorldHeight = ReferenceOrthoSize * 2f;
-        float refWorldWidth = refWorldHeight * (ReferenceWidth / ReferenceHeight);
 
-  
-        float actualWorldHeight = cam.orthographicSize * 2f;
-        float actualWorldWidth = actualWorldHeight * ((float)Screen.width / Screen.height);
+        float worldHeight = cam.orthographicSize * 2f;
+        float worldWidth = worldHeight * cam.aspect;
 
-  
-        float scaleX = actualWorldWidth / refWorldWidth;
-        float scaleY = actualWorldHeight / refWorldHeight;
+        Vector2 spriteSize = sr.sprite.bounds.size;
 
-        float scale = Mathf.Max(scaleX, scaleY); 
+        float scaleX = worldWidth / spriteSize.x;
+        float scaleY = worldHeight / spriteSize.y;
 
+        float scale = Mathf.Max(scaleX, scaleY);
         transform.localScale = new Vector3(scale, scale, 1f);
-        
     }
+
 }

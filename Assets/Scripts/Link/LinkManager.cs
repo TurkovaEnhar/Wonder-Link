@@ -38,10 +38,22 @@ namespace Link
 
         public void TryAddToLink(Chip candidate)
         {
+            if (currentLink.Count == 0) return;
+
+            Chip last = currentLink[^1];
+
+            //Geri gitme
+            if (currentLink.Count > 1 && candidate == currentLink[^2])
+            {
+                Chip removed = currentLink[^1];
+                removed.ResetColor();
+                currentLink.RemoveAt(currentLink.Count - 1);
+                return;
+            }
+
             if (candidate.Color != _currentColor) return;
             if (currentLink.Contains(candidate)) return;
 
-            Chip last = currentLink[^1];
             if (AreNeighbors(last, candidate))
             {
                 AddChipToLink(candidate);

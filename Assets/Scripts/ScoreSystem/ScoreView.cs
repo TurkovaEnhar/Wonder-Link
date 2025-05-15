@@ -17,7 +17,7 @@ namespace ScoreSystem
         {
             _originalLinkPos = linkScoreText.transform.position;
             totalScoreText.text = "Score: 0";
-            targetScoreText.text = "Target Score : " + targetScore ;
+            targetScoreText.text = "Target: " + targetScore ;
             
         }
 

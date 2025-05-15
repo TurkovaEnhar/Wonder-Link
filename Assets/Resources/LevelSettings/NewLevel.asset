@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e5899554d994dbf9cd3af3cbd4c4eca, type: 3}
   m_Name: NewLevel
   m_EditorClassIdentifier: 
-  moveCount: 1
-  targetScore: 2
+  moveCount: 100
+  targetScore: 200
   colorTargets: []
-  minLinkLength: 0
+  linkTarget:
+    linkSize: 0
+    amount: 0
+  autoEndOnTarget: 0
+  autoEndOnRequirements: 0

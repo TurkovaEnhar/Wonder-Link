@@ -26,7 +26,6 @@ namespace Game
         [SerializeField] private GameEndManager endGameManager;
         [SerializeField] private InputHandler inputHandler;
         [SerializeField] private StatUIManager statUIManager;
-        [SerializeField] private Button pauseButton;
         
         
         private StatSystem _statSystem;
@@ -37,7 +36,6 @@ namespace Game
         private void Awake()
         {
             Application.targetFrameRate = 60;
-            pauseButton.onClick.AddListener(ShowPauseMenu);
             InitializeManagers();
         }
 
@@ -45,7 +43,6 @@ namespace Game
 
         private void InitializeManagers()
         {
-            _statSystem = new StatSystem();
             _statSystem = SaveSystem.LoadStats();
             _boardScanService = new BoardScanService();
             
@@ -62,10 +59,6 @@ namespace Game
             scoreController.OnGameEnded += EndGame;
         }
         
-        private void ShowPauseMenu()
-        {
-            statUIManager.ShowStats(_statSystem);
-        }
 
         private void OnDestroy()
         {

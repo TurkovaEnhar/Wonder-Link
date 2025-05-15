@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Utility;
 
 namespace Game
 {
@@ -14,6 +15,7 @@ namespace Game
         [SerializeField] private TextMeshProUGUI statusText;
         [SerializeField] private TextMeshProUGUI finalScoreText;
         [SerializeField] private Button restartButton;
+        [SerializeField] private Button mainMenuButton;
 
         private ScoreController _scoreManager;
         private bool _isGameEnded;
@@ -22,12 +24,14 @@ namespace Game
         {
             _scoreManager = scoreManager;
             restartButton.onClick.AddListener(RestartGame);
+            mainMenuButton.onClick.AddListener(MainMenu);
             
         }
 
         private void OnDestroy()
         {
             restartButton.onClick.RemoveListener(RestartGame);
+            mainMenuButton.onClick.RemoveListener(MainMenu);
         }
 
         public void Open()
@@ -40,7 +44,11 @@ namespace Game
 
         public void RestartGame()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+           SceneManagement.Instance.LoadGameSceneAsync();
+        } 
+        public void MainMenu()
+        {
+           SceneManagement.Instance.LoadMainMenuAsync();
         }
     }
 }

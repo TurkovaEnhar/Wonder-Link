@@ -21,7 +21,7 @@ namespace Game
         [Header("Managers")]
         
         [SerializeField] private MoveController moveController;
-        [SerializeField] private ScoreManager scoreManager;
+        [SerializeField] private ScoreController scoreController;
         [SerializeField] private BoardManager boardManager;
         [SerializeField] private GameEndManager endGameManager;
         [SerializeField] private InputHandler inputHandler;
@@ -49,17 +49,17 @@ namespace Game
             _statSystem = SaveSystem.LoadStats();
             _boardScanService = new BoardScanService();
             
-            _linkService = new LinkService(scoreManager, _statSystem,gameConfig.linkMode);
+            _linkService = new LinkService(scoreController, _statSystem,gameConfig.linkMode);
             
             moveController.Initialize(gameConfig);
             var moveService = moveController.GetMoveService();
-            scoreManager.Initialize(moveService,gameConfig);
+            scoreController.Initialize(moveService,gameConfig);
             boardManager.Initialize(_linkService,_boardScanService,gameConfig);
-            endGameManager.Initialize(scoreManager);
+            endGameManager.Initialize(scoreController);
             inputHandler.Initialize(_linkService);
             
-            scoreManager.OnTargetScoreReached += EndGame;
-            scoreManager.OnGameEnded += EndGame;
+            scoreController.OnTargetScoreReached += EndGame;
+            scoreController.OnGameEnded += EndGame;
         }
         
         private void ShowPauseMenu()

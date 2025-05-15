@@ -9,7 +9,7 @@ namespace Link
 {
     public class LinkService
     {
-        private readonly ScoreManager _scoreManager;
+        private readonly ScoreController _scoreManager;
         private readonly StatSystem _statSystem;
         private readonly INeighborChecker _neighborChecker;
         private readonly LinkMode _linkMode;
@@ -19,7 +19,7 @@ namespace Link
 
         public event Action OnLinkSuccess;
 
-        public LinkService(ScoreManager scoreManager, StatSystem statSystem, LinkMode linkMode)
+        public LinkService(ScoreController scoreManager, StatSystem statSystem, LinkMode linkMode)
         {
             _scoreManager = scoreManager;
             _statSystem = statSystem;

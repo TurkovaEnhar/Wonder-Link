@@ -642,6 +642,7 @@ GameObject:
   - component: {fileID: 417145983}
   - component: {fileID: 417145985}
   - component: {fileID: 417145984}
+  - component: {fileID: 417145986}
   m_Layer: 5
   m_Name: ScoreBG
   m_TagString: Untagged
@@ -707,6 +708,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 417145982}
   m_CullTransparentMesh: 1
+--- !u!114 &417145986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 417145982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80b2d778770e49d9bb4de03b37b8c561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalScoreText: {fileID: 1735593195}
+  linkScoreText: {fileID: 376227597}
 --- !u!1 &463514655
 GameObject:
   m_ObjectHideFlags: 0
@@ -1002,7 +1017,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameConfig: {fileID: 11400000, guid: c747a011232517c418098e268e79294a, type: 2}
   moveController: {fileID: 1272152005}
-  scoreManager: {fileID: 1592848381}
+  scoreController: {fileID: 1592848381}
   boardManager: {fileID: 463514657}
   endGameManager: {fileID: 1703602829}
   inputHandler: {fileID: 1254512177}
@@ -3087,11 +3102,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1592848379}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a63d572277c947ee82865dac6b151699, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ffbf1fa4972445a9702a8078e43a54b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalScoreText: {fileID: 1735593195}
-  linkScoreText: {fileID: 376227597}
+  scoreView: {fileID: 417145986}
 --- !u!1 &1703602825
 GameObject:
   m_ObjectHideFlags: 0
@@ -3197,7 +3211,7 @@ GameObject:
   - component: {fileID: 1735593196}
   - component: {fileID: 1735593195}
   m_Layer: 5
-  m_Name: ScoreText
+  m_Name: TotalScoreText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

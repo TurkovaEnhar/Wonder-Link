@@ -6,6 +6,7 @@ using Board.Chips;
 using Game;
 using MoveSystem;
 using ScoreSystem;
+using Stats;
 using UnityEngine;
 
 namespace Link
@@ -15,22 +16,22 @@ namespace Link
         public Action OnLinkSuccess;
         private ScoreManager _scoreManager;
         private GameConfig _gameConfig;
-
+        private StatSystem _statSystem;
+        
         private List<Chip> currentLink = new();
         private ChipColor _currentColor;
 
 
-        public void Initialize(ScoreManager scoreManager, GameConfig gameConfig)
+        public void Initialize(ScoreManager scoreManager,StatSystem statSystem ,GameConfig gameConfig)
         {
             _scoreManager = scoreManager;
+            _statSystem = statSystem;
             _gameConfig = gameConfig;
             
         }
         
         public void BeginLink(Chip startChip)
         {
-          
-            
             currentLink.Clear();
             _currentColor = startChip.Color;
             AddChipToLink(startChip);
@@ -70,7 +71,6 @@ namespace Link
             {
                 CancelLink();
             }
-
             currentLink.Clear();
         }
 
@@ -89,6 +89,7 @@ namespace Link
             {
                 chip.DestroyChip();
             }
+            _statSystem.RecordLink(currentLink.Count,currentLink[0].Color);
             _scoreManager.AddScore(currentLink.Count); 
             OnLinkSuccess?.Invoke();
           

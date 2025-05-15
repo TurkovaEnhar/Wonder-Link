@@ -23,10 +23,10 @@ namespace ScoreSystem
         private Sequence _currentMoveSequence;
         private Tween _currentScoreTween;
         private bool _endGameOnScore;
-        private MoveManager _moveManager;
+        private IMoveService _moveManager;
         private bool _isAnimationPlaying;
 
-        public void Initialize(MoveManager moveManager, GameConfig gameConfig)
+        public void Initialize(IMoveService moveManager, GameConfig gameConfig)
         {
             _moveManager = moveManager;
             _baseScore = gameConfig.GetBasePointPerChip();

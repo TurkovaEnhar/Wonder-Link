@@ -17,9 +17,10 @@ namespace Game
         [SerializeField] private GameConfig gameConfig;
         
         
+        [FormerlySerializedAs("moveManager")]
         [Header("Managers")]
         
-        [SerializeField] private MoveManager moveManager;
+        [SerializeField] private MoveController moveController;
         [SerializeField] private ScoreManager scoreManager;
         [SerializeField] private BoardManager boardManager;
         [SerializeField] private GameEndManager endGameManager;
@@ -50,9 +51,9 @@ namespace Game
             
             _linkService = new LinkService(scoreManager, _statSystem,gameConfig.linkMode);
             
-            
-            moveManager.Initialize(gameConfig);
-            scoreManager.Initialize(moveManager,gameConfig);
+            moveController.Initialize(gameConfig);
+            var moveService = moveController.GetMoveService();
+            scoreManager.Initialize(moveService,gameConfig);
             boardManager.Initialize(_linkService,_boardScanService,gameConfig);
             endGameManager.Initialize(scoreManager);
             inputHandler.Initialize(_linkService);

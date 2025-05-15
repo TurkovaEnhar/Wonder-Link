@@ -43,13 +43,13 @@ namespace BonusSystems.LevelSystem
             {
                 if (activeGoals.TryGetValue(entry.color, out int count) && count > 0)
                 {
-                    entry.countText.text = $"x{count}";
+                    entry.countText.text = $"{count}";
                     entry.countText.gameObject.SetActive(true);
                     hasAny = true;
                 }
                 else
                 {
-                    entry.countText.gameObject.SetActive(false);
+                    entry.countText.text = "0";
                 }
             }
 
@@ -74,7 +74,7 @@ namespace BonusSystems.LevelSystem
         {
             var a = FindTarget(color);
             
-            a.countText.text = $"x{amount}";
+            a.countText.text = $"{amount}";
         }
   
 

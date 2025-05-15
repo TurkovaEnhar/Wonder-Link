@@ -69,6 +69,7 @@ namespace BonusSystems.LevelSystem
             levelButton.onClick.AddListener(ShowLevelWindow);
 
             _currentLevelIndex = 0;
+          
             UpdateLevelUI();
         }
 
@@ -82,6 +83,11 @@ namespace BonusSystems.LevelSystem
         {
             if (_currentLevelIndex < 0 || _currentLevelIndex >= levelDatabase.GetLevelCount()) return;
 
+            foreach (var colors in colorTargetDisplay)
+            {
+                colors.countText.text = "0";
+
+            }
             LevelDataSO level = levelDatabase.GetLevel(_currentLevelIndex);
             levelNumberText.text = $"Level {_currentLevelIndex + 1}";
 

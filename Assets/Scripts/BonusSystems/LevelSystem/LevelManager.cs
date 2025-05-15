@@ -38,4 +38,5 @@ public class LevelManager : MonoBehaviour
 
         LoadLevel(currentLevelIndex);
     }
+    public bool AreLevelsFinished() => currentLevelIndex >= database.GetLevelCount();
 }

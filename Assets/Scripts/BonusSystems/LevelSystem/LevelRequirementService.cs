@@ -61,7 +61,7 @@ namespace BonusSystems.LevelSystem
             OnAllRequirementsMet?.Invoke();
         }
 
-        private bool IsAllRequirementsMet()
+        public bool IsAllRequirementsMet()
         {
             bool colorsDone = true;
 

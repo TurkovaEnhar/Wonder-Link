@@ -2126,7 +2126,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 2.0543208
+  orthographic size: 2.5001037
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2185,7 +2185,7 @@ GameObject:
   - component: {fileID: 963887325}
   - component: {fileID: 963887324}
   m_Layer: 5
-  m_Name: RestartButton
+  m_Name: NextLevelOrRestartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3917,7 +3917,7 @@ MonoBehaviour:
   endGameScreen: {fileID: 1303225893}
   statusText: {fileID: 2102821212}
   finalScoreText: {fileID: 1905107736}
-  restartButton: {fileID: 963887324}
+  nextLevelRestartButton: {fileID: 963887324}
   mainMenuButton: {fileID: 675001191}
 --- !u!1 &1735593193
 GameObject:

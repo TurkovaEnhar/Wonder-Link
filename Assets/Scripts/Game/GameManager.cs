@@ -52,7 +52,7 @@ namespace Game
             levelRequirementView.Initialize(_levelRequirementService);
             scoreController.Initialize(moveService,level.targetScore,gameConfig.GetBasePointPerChip());
             boardManager.Initialize(_linkService,_boardScanService,gameConfig);
-            endGameManager.Initialize(scoreController);
+            endGameManager.Initialize(scoreController,_levelRequirementService);
             inputHandler.Initialize(_linkService);
             
             

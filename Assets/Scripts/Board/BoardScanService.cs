@@ -1,25 +1,14 @@
 ﻿using System.Collections.Generic;
-using Board.Chips;
-using Game;
-using Link;
 using UnityEngine;
+using Board.Chips;
+using Link;
 
 namespace Board
 {
-    public class BoardAnalyzer : MonoBehaviour
+    public class BoardScanService : IBoardAnalyzer
     {
-        private BoardManager _boardManager;
-        private GameConfig _gameConfig;
-        
-        public void Initialize(BoardManager boardManager, GameConfig gameConfig)
+        public bool HasPossibleMoves(Tile[,] board, LinkMode linkMode)
         {
-            _boardManager = boardManager;
-            _gameConfig = gameConfig;
-            
-        }
-        public bool HasPossibleMoves()
-        {
-            Tile[,] board = _boardManager.GetBoard();
             int width = board.GetLength(0);
             int height = board.GetLength(1);
             HashSet<Vector2Int> globalVisited = new();
@@ -34,7 +23,7 @@ namespace Board
                     Chip chip = board[x, y].CurrentChip;
                     if (chip == null) continue;
 
-                    int groupSize = FloodFill(pos, chip.Color, board, globalVisited);
+                    int groupSize = FloodFill(pos, chip.Color, board, globalVisited, linkMode);
 
                     if (groupSize >= 3)
                         return true;
@@ -44,7 +33,7 @@ namespace Board
             return false;
         }
 
-        private int FloodFill(Vector2Int start, ChipColor color, Tile[,] board, HashSet<Vector2Int> visited)
+        private int FloodFill(Vector2Int start, ChipColor color, Tile[,] board, HashSet<Vector2Int> visited, LinkMode linkMode)
         {
             int width = board.GetLength(0);
             int height = board.GetLength(1);
@@ -60,7 +49,7 @@ namespace Board
                 Vector2Int current = stack.Pop();
                 count++;
 
-                foreach (Vector2Int dir in GetDirections())
+                foreach (Vector2Int dir in GetDirections(linkMode))
                 {
                     Vector2Int neighbor = current + dir;
 
@@ -85,14 +74,14 @@ namespace Board
             return pos.x >= 0 && pos.y >= 0 && pos.x < width && pos.y < height;
         }
 
-        private IEnumerable<Vector2Int> GetDirections()
+        private IEnumerable<Vector2Int> GetDirections(LinkMode mode)
         {
             yield return Vector2Int.up;
             yield return Vector2Int.down;
             yield return Vector2Int.left;
             yield return Vector2Int.right;
 
-            if (_gameConfig.linkMode == LinkMode.EightWay)
+            if (mode == LinkMode.EightWay)
             {
                 yield return new Vector2Int(1, 1);
                 yield return new Vector2Int(-1, 1);

@@ -23,20 +23,20 @@ namespace Board
         
         private Tile[,] _board;
         private GameConfig _boardSettings;
-        private LinkManager _linkManager;
-        private BoardAnalyzer _boardAnalyzer;
+        private LinkService _linkService;
+        private BoardScanService _boardScanService;
         private ObjectPool<Chip> _chipPool;
 
 
-        public void Initialize( LinkManager linkManager,BoardAnalyzer boardAnalyzer, GameConfig gameConfig )
+        public void Initialize( LinkService linkService,BoardScanService boardScanService, GameConfig gameConfig )
         {
             _boardSettings = gameConfig;
-            _linkManager = linkManager;
-            _boardAnalyzer = boardAnalyzer;
+            _linkService = linkService;
+            _boardScanService = boardScanService;
             _chipPool = new ObjectPool<Chip>(chipPrefab, initialPoolSize, transform);
             GenerateBoard();
 
-            _linkManager.OnLinkSuccess += Fill;
+            _linkService.OnLinkSuccess += Fill;
         }
         public void GenerateBoard()
         {
@@ -87,7 +87,8 @@ namespace Board
         {
             FillBoard();
 
-            if (!_boardAnalyzer.HasPossibleMoves())
+            bool hasMoves = _boardScanService.HasPossibleMoves(GetBoard(), _boardSettings.linkMode);
+            if (!hasMoves)
             {
                 ShuffleBoard();
             }
@@ -182,6 +183,11 @@ namespace Board
                     chip.ParentTile = tile;
                 }
             }
+            bool hasMoves = _boardScanService.HasPossibleMoves(GetBoard(), _boardSettings.linkMode);
+            if (!hasMoves)
+            {
+                ShuffleBoard();
+            }
         }
 
         private Vector2 GetTileSize()
@@ -199,6 +205,16 @@ namespace Board
         private ChipColor GetRandomColor()
         {
             return (ChipColor)Random.Range(0, System.Enum.GetValues(typeof(ChipColor)).Length);
+        }
+        
+        [ContextMenu("Check PossibleMoves")]
+        public void CheckPossibleMoves()
+        {
+            bool hasMoves = _boardScanService.HasPossibleMoves(GetBoard(), _boardSettings.linkMode);
+            if (!hasMoves)
+            {
+                ShuffleBoard();
+            }
         }
         public Tile[,] GetBoard() => _board;
         public ChipSettings GetChipSettings() => chipVisualConfig;

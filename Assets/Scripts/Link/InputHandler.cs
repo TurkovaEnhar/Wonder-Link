@@ -7,13 +7,13 @@ namespace Link
     public class InputHandler : MonoBehaviour
     {
         private Camera _mainCamera;
-        private LinkManager _linkManager;
+        private LinkService _linkService;
         private bool _isLinking;
         [SerializeField] private LinkLineDrawer lineDrawer;
 
-        public void Initialize(LinkManager linkManager)
+        public void Initialize(LinkService linkService)
         {
-            _linkManager = linkManager;
+            _linkService = linkService;
             _mainCamera = Camera.main;
         }
 
@@ -52,8 +52,8 @@ namespace Link
         }
     }
 #endif
-            if(_linkManager?.GetCurrentLink().Count>0)
-                lineDrawer.UpdateLine(_linkManager.GetCurrentLink());
+            if(_linkService?.GetCurrentLink().Count>0)
+                lineDrawer.UpdateLine(_linkService.GetCurrentLink());
         }
 
         private void StartLink()
@@ -62,7 +62,7 @@ namespace Link
             if (chip)
             {
                 _isLinking = true;
-                _linkManager.BeginLink(chip);
+                _linkService.BeginLink(chip);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Link
             Chip chip = RaycastChip();
             if (chip)
             {
-                _linkManager.TryAddToLink(chip);
+                _linkService.TryAddToLink(chip);
             }
         }
         private void StartLink(Vector2 pos)
@@ -82,7 +82,7 @@ namespace Link
             if (chip)
             {
                 _isLinking = true;
-                _linkManager.BeginLink(chip);
+                _linkService.BeginLink(chip);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Link
         {
             if (!_isLinking) return;
             Chip chip = RaycastChip(pos);
-            if (chip) _linkManager.TryAddToLink(chip);
+            if (chip) _linkService.TryAddToLink(chip);
         }
 
         private void EndLink()
@@ -98,7 +98,7 @@ namespace Link
             if (!_isLinking) return;
 
             _isLinking = false;
-            _linkManager.CompleteLink();
+            _linkService.CompleteLink();
             lineDrawer.ClearLine();
         }
 

@@ -5,6 +5,7 @@ using MoveSystem;
 using ScoreSystem;
 using Stats;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Game
@@ -12,18 +13,24 @@ namespace Game
     public class GameManager : MonoBehaviour
     {
         [Header("Game Settings")]
+        
         [SerializeField] private GameConfig gameConfig;
+        
+        
         [Header("Managers")]
+        
         [SerializeField] private MoveManager moveManager;
         [SerializeField] private ScoreManager scoreManager;
-        [SerializeField] private LinkManager linkManager;
-        [SerializeField] private BoardAnalyzer boardAnalyzer;
         [SerializeField] private BoardManager boardManager;
         [SerializeField] private GameEndManager endGameManager;
         [SerializeField] private InputHandler inputHandler;
         [SerializeField] private StatUIManager statUIManager;
         [SerializeField] private Button pauseButton;
+        
+        
         private StatSystem _statSystem;
+        private LinkService _linkService;
+        private BoardScanService _boardScanService;
 
 
         private void Awake()
@@ -39,13 +46,16 @@ namespace Game
         {
             _statSystem = new StatSystem();
             _statSystem = SaveSystem.LoadStats();
+            _boardScanService = new BoardScanService();
+            
+            _linkService = new LinkService(scoreManager, _statSystem,gameConfig.linkMode);
+            
+            
             moveManager.Initialize(gameConfig);
             scoreManager.Initialize(moveManager,gameConfig);
-            linkManager.Initialize(scoreManager,_statSystem,gameConfig);
-            boardAnalyzer.Initialize(boardManager,gameConfig);
-            boardManager.Initialize(linkManager,boardAnalyzer,gameConfig);
+            boardManager.Initialize(_linkService,_boardScanService,gameConfig);
             endGameManager.Initialize(scoreManager);
-            inputHandler.Initialize(linkManager);
+            inputHandler.Initialize(_linkService);
             
             scoreManager.OnTargetScoreReached += EndGame;
             scoreManager.OnGameEnded += EndGame;
@@ -66,5 +76,7 @@ namespace Game
             SaveSystem.SaveStats(_statSystem);
             endGameManager.Open();
         }
+
+      
     }
 }

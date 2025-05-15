@@ -11,7 +11,6 @@ namespace Test
     {
         [SerializeField] private BoardManager boardManager;
         [SerializeField] private GameConfig gameConfig;
-        [SerializeField] private BoardAnalyzer analyzer;
 
         private static readonly ChipColor[,] JammedGrid8x8 = new ChipColor[8, 8]
         {

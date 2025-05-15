@@ -8,7 +8,9 @@ namespace MoveSystem
     public class MoveManager : MonoBehaviour
     {
         public Action OnMoveRunOut;
+        
         [SerializeField] private TextMeshProUGUI text;
+        
         private int _remainingMoves;
 
         public void Initialize(GameConfig gameConfig)

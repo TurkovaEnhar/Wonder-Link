@@ -34,5 +34,6 @@ namespace ScoreSystem
             _score = 0;
             OnScoreChanged?.Invoke(_score);
         }
+        public bool isTargetReached() => _score >= _targetScore;
     }
 }

@@ -28,14 +28,15 @@ namespace ScoreSystem
             _basePointPerChip = basePointPerChip;
             
             scoreView.Initialize(targetScore);
-            
+
+            _levelRequirementService.OnAllRequirementsMet += CheckEndGame;
             _scoreService.OnTargetReached += CheckEndGame;
             _moveService.OnMoveRunOut += () => StartCoroutine(WaitForAnimationThenEndGame());
         }
 
         private void CheckEndGame()
         {
-            if (_levelRequirementService.IsAllRequirementsMet())
+            if (_levelRequirementService.IsAllRequirementsMet() && _scoreService.isTargetReached())
             {
                 OnTargetScoreReached?.Invoke();
             }

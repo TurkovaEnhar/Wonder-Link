@@ -13,5 +13,6 @@ namespace ScoreSystem
 
         void AddScore(int amount);
         void Reset();
+        bool isTargetReached();
     }
 }

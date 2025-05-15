@@ -4478,7 +4478,7 @@ GameObject:
   - component: {fileID: 1646360144}
   - component: {fileID: 1646360146}
   m_Layer: 5
-  m_Name: ParentObject
+  m_Name: InputBlocker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -7,7 +7,6 @@ namespace Utility
     public class SceneManagement : MonoBehaviour
     {
         public static SceneManagement Instance;
-        public Button playButton;
 
         private void Awake()
         {
@@ -17,7 +16,6 @@ namespace Utility
             }
         
             DontDestroyOnLoad(this);
-            playButton.onClick.AddListener(LoadGameSceneAsync);
         }
 
   

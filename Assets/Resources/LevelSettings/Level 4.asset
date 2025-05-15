@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e5899554d994dbf9cd3af3cbd4c4eca, type: 3}
-  m_Name: NewLevel 3
+  m_Name: Level 4
   m_EditorClassIdentifier: 
-  moveCount: 5
-  targetScore: 4
+  moveCount: 20
+  targetScore: 100
   colorTargets: []
   linkTarget:
     linkSize: 0

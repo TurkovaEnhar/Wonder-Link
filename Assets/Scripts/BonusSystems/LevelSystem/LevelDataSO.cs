@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Board.Chips;
+using UnityEngine.Serialization;
 
-    [CreateAssetMenu(menuName = "Game/Level", fileName = "NewLevel")]
+[CreateAssetMenu(menuName = "Game/Level", fileName = "NewLevel")]
     public class LevelDataSO : ScriptableObject
     {
         [Header("Zorunlu Hedefler")] public int moveCount = 20;
@@ -13,8 +14,7 @@ using Board.Chips;
 
         public bool HasColorTargets => colorTargets != null && colorTargets.Count > 0;
         public bool HasMinLinkTarget => linkTarget.amount > 0;
-        public bool autoEndOnTarget;
-        public bool autoEndOnRequirements;
+        public bool autoEndOnTargetCompleted;
     }
 
     [System.Serializable]

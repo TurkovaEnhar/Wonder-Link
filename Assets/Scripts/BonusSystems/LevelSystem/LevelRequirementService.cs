@@ -21,8 +21,6 @@ namespace BonusSystems.LevelSystem
         public LevelRequirementService(LevelDataSO levelData)
         {
             _levelData = levelData;
-          
-
             _requiredColors.Clear();
             if (_levelData.HasColorTargets)
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using BonusSystems.LevelSystem;
 using UnityEngine;
 using Game;
 using MoveSystem;
@@ -7,26 +8,37 @@ namespace ScoreSystem
 {
     public class ScoreController : MonoBehaviour
     {
-        [SerializeField] private ScoreView scoreView;
-        private IScoreService _scoreService;
-        private IMoveService _moveService;
-
-        private bool _isAnimating;
-
         public System.Action OnTargetScoreReached;
         public System.Action OnGameEnded;
+        [SerializeField] private ScoreView scoreView;
+        
+        private LevelRequirementService _levelRequirementService;
+        private IScoreService _scoreService;
+        private IMoveService _moveService;
+        
 
+        private bool _isAnimating;
         private int _basePointPerChip;
-        public void Initialize( IMoveService moveService,int targetScore,int basePointPerChip )
+        public void Initialize( IMoveService moveService,LevelRequirementService levelRequirementService,int targetScore,int basePointPerChip )
         {
             _moveService = moveService;
+            _levelRequirementService = levelRequirementService;
+            
             _scoreService = new ScoreService(targetScore);
             _basePointPerChip = basePointPerChip;
-
+            
             scoreView.Initialize(targetScore);
-            _scoreService.OnTargetReached += () => OnTargetScoreReached?.Invoke();
-
+            
+            _scoreService.OnTargetReached += CheckEndGame;
             _moveService.OnMoveRunOut += () => StartCoroutine(WaitForAnimationThenEndGame());
+        }
+
+        private void CheckEndGame()
+        {
+            if (_levelRequirementService.IsAllRequirementsMet())
+            {
+                OnTargetScoreReached?.Invoke();
+            }
         }
 
         public void AddScore(int linkSize)

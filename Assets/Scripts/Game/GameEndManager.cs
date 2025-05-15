@@ -36,7 +36,7 @@ namespace Game
 
         private void NextLevelorRestart()
         {
-            if (_isLevelWon && LevelManager.Instance.AreLevelsFinished())
+            if (_isLevelWon && !LevelManager.Instance.AreLevelsFinished())
             {
                 NextLevel();
             }
@@ -63,7 +63,7 @@ namespace Game
             _isLevelWon = _scoreManager.HasWon() && _levelRequirementService.IsAllRequirementsMet();
             if (_isLevelWon)
             {
-                nextLevelRestartButtonText.text = LevelManager.Instance.AreLevelsFinished() ? "Next Level" : "Restart\n(No more Levels)";
+                nextLevelRestartButtonText.text = !LevelManager.Instance.AreLevelsFinished() ? "Next Level" : "Restart\n(No more Levels)";
                 statusText.text = "You won!";
             }
             else

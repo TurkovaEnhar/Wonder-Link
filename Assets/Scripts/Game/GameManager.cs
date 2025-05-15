@@ -50,25 +50,20 @@ namespace Game
             var moveService = moveController.GetMoveService();
             
             levelRequirementView.Initialize(_levelRequirementService);
-            scoreController.Initialize(moveService,level.targetScore,gameConfig.GetBasePointPerChip());
+            scoreController.Initialize(moveService,_levelRequirementService,level.targetScore,gameConfig.GetBasePointPerChip());
             boardManager.Initialize(_linkService,_boardScanService,gameConfig);
             endGameManager.Initialize(scoreController,_levelRequirementService);
             inputHandler.Initialize(_linkService);
             
             
-            if (level.autoEndOnTarget)
+            if (level.autoEndOnTargetCompleted)
             {
-                // Hedef Skora ulaşıldığında hamle sayısını veya özel requirementları beklemeden oyunu bitirmek istenirse
                 scoreController.OnTargetScoreReached += EndGame;
-            }
-            if (level.autoEndOnRequirements)
-            {
-                // Requirementlar bittiğinde hamle sayısını ve hedef skoru beklemeden oyunu bitirmek istenirse 
-                _levelRequirementService.OnAllRequirementsMet += EndGame;
             }
             
             _linkService.OnLinkEvaluated += _levelRequirementService.EvaluateLink;
             scoreController.OnGameEnded += EndGame;
+  
         }
         
 

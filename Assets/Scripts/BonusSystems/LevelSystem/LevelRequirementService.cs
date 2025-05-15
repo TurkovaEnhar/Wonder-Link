@@ -6,17 +6,19 @@ using UnityEngine;
 
 namespace BonusSystems.LevelSystem
 {
-    public class LevelRequirementManager : MonoBehaviour
+    public class LevelRequirementService 
     {
-        private LevelDataSO _levelData;
-
-        private Dictionary<ChipColor, int> _requiredColors = new();
-        private int _requiredLongLinks;
-        private int _longLinkTarget = 0;
-
+        public event Action<ChipColor, int> OnColorTargetChanged;
+        public event Action<int> OnLongLinkProgressed;
         public event Action OnAllRequirementsMet;
+        
+        private LevelDataSO _levelData;
+        private Dictionary<ChipColor, int> _requiredColors = new();
+        private int _requiredLinkAmount;
+        private int _requiredlinkLength;
 
-        public void Initialize(LevelDataSO levelData)
+
+        public LevelRequirementService(LevelDataSO levelData)
         {
             _levelData = levelData;
           
@@ -28,7 +30,8 @@ namespace BonusSystems.LevelSystem
                     _requiredColors[colorReq.color] = colorReq.count;
             }
 
-            _longLinkTarget = levelData.linkTarget.linkSize;
+            _requiredlinkLength = levelData.linkTarget.linkSize;
+            _requiredLinkAmount = _levelData.linkTarget.amount;
         }
 
         public void EvaluateLink(int linkLength, ChipColor color)
@@ -42,23 +45,23 @@ namespace BonusSystems.LevelSystem
                     _requiredColors[color] -= linkLength;
                     _requiredColors[color] = Mathf.Max(0, _requiredColors[color]); // Asla negatif olmasın
                     updated = true;
+                    OnColorTargetChanged?.Invoke(color, _requiredColors[color]);
                 }
             }
 
-            if (_levelData.HasMinLinkTarget && linkLength >= _longLinkTarget)
+            if (_levelData.HasMinLinkTarget && linkLength >= _requiredlinkLength)
             {
-                _requiredLongLinks++;
+                _requiredLinkAmount--;
+                OnLongLinkProgressed?.Invoke(_requiredLinkAmount);
                 updated = true;
             }
 
-            if (updated && IsAllRequirementsMet())
-            {
-                Debug.Log("Tüm özel görevler tamamlandı!");
-                OnAllRequirementsMet?.Invoke();
-            }
+            if (!updated || !IsAllRequirementsMet()) return;
+            Debug.Log("Tüm özel görevler tamamlandı!");
+            OnAllRequirementsMet?.Invoke();
         }
 
-        public bool IsAllRequirementsMet()
+        private bool IsAllRequirementsMet()
         {
             bool colorsDone = true;
 
@@ -68,12 +71,15 @@ namespace BonusSystems.LevelSystem
                     colorsDone = false;
             }
 
-            bool longLinksDone = !_levelData.HasMinLinkTarget || _requiredLongLinks >= 1;
+            bool longLinksDone = !_levelData.HasMinLinkTarget || _requiredLinkAmount <=0;
 
             return colorsDone && longLinksDone;
         }
 
         public Dictionary<ChipColor, int> GetRemainingColorGoals() => new(_requiredColors);
-        public int GetLongLinksDone() => _requiredLongLinks;
+        public int GetRemainingLongLinks() => _requiredLinkAmount;
+        public int GetRequiredLinkLength() => _requiredlinkLength;
+        public bool HasColorTargets() => _levelData.HasColorTargets;
+        public bool HasMinLinkTarget() => _levelData.HasMinLinkTarget;
     }
 }

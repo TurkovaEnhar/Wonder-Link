@@ -16,12 +16,14 @@ namespace ScoreSystem
         public System.Action OnTargetScoreReached;
         public System.Action OnGameEnded;
 
-        public void Initialize( IMoveService moveService,int targetScore,GameConfig config)
+        private int _basePointPerChip;
+        public void Initialize( IMoveService moveService,int targetScore,int basePointPerChip )
         {
             _moveService = moveService;
-            _scoreService = new ScoreService(targetScore, config.GetAutoEndOnTarget());
+            _scoreService = new ScoreService(targetScore);
+            _basePointPerChip = basePointPerChip;
 
-            // _scoreService.OnScoreChanged += score => scoreView.SetScore(score);
+            scoreView.Initialize(targetScore);
             _scoreService.OnTargetReached += () => OnTargetScoreReached?.Invoke();
 
             _moveService.OnMoveRunOut += () => StartCoroutine(WaitForAnimationThenEndGame());
@@ -29,7 +31,7 @@ namespace ScoreSystem
 
         public void AddScore(int linkSize)
         {
-            int points = linkSize * 10;
+            int points = linkSize * _basePointPerChip;
             _scoreService.AddScore(points);
             _moveService.ConsumeMove();
 

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Utility;
 
 public class LevelManager : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class LevelManager : MonoBehaviour
     public void LoadLevel(int levelIndex)
     {
         currentLevelIndex = levelIndex;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+        SceneManagement.Instance.LoadGameSceneAsync();
     }
 
     public void LoadNextLevel()

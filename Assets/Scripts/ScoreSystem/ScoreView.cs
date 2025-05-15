@@ -7,14 +7,18 @@ namespace ScoreSystem
     public class ScoreView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI totalScoreText;
+        [SerializeField] private TextMeshProUGUI targetScoreText;
         [SerializeField] private TextMeshProUGUI linkScoreText;
 
         private Vector3 _originalLinkPos;
         private Sequence _scoreSequence;
 
-        private void Awake()
+        public void Initialize(int targetScore)
         {
             _originalLinkPos = linkScoreText.transform.position;
+            totalScoreText.text = "Score: 0";
+            targetScoreText.text = "Target Score : " + targetScore ;
+            
         }
 
         public void AnimateScore(int scoreAdded, int newTotalScore)

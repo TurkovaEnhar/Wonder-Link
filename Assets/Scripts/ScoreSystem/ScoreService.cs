@@ -15,10 +15,9 @@ namespace ScoreSystem
         public int TargetScore => _targetScore;
         public bool HasWon => _score >= _targetScore;
 
-        public ScoreService(int targetScore, bool autoEnd)
+        public ScoreService(int targetScore)
         {
             _targetScore = targetScore;
-            _autoEnd = autoEnd;
         }
 
         public void AddScore(int amount)
@@ -26,7 +25,7 @@ namespace ScoreSystem
             _score += amount;
             OnScoreChanged?.Invoke(_score);
 
-            if (_autoEnd && _score >= _targetScore)
+            if (_score >= _targetScore)
                 OnTargetReached?.Invoke();
         }
 
